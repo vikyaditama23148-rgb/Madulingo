@@ -1,0 +1,27 @@
+{
+  "name": "MaduLingo - Belajar Bahasa Madura",
+  "short_name": "MaduLingo",
+  "description": "Platform gamifikasi belajar bahasa dan budaya Madura",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#0F172A",
+  "theme_color": "#E11D48",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "games"],
+  "lang": "id",
+  "dir": "ltr"
+}
