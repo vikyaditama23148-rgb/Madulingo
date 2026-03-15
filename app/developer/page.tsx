@@ -28,62 +28,68 @@ const developer = {
   location: 'Sumenep, Madura',
   avatar: 'VA',
   socials: [
-    { label: 'LinkedIn', href: 'https://www.linkedin.com/in/viky-aditama', icon: Linkedin, color: '#0A66C2' },
-    { label: 'Instagram', href: 'https://www.instagram.com/vkyadtm', icon: Instagram, color: '#E1306C' },
-    { label: 'TikTok', href: 'https://www.tiktok.com/@vixssy.x', icon: null, tiktokSvg: true, color: '#ffffff' },
-    { label: 'Email', href: 'mailto:vikyaditama23148@gmail.com', icon: Mail, color: '#E11D48' },
+    { label: 'LinkedIn',  href: 'https://www.linkedin.com/in/viky-aditama',      icon: Linkedin,  color: '#0A66C2' },
+    { label: 'Instagram', href: 'https://www.instagram.com/vkyadtm',             icon: Instagram, color: '#E1306C' },
+    { label: 'TikTok',    href: 'https://www.tiktok.com/@vixssy.x',              icon: null, tiktokSvg: true, color: '#ffffff' },
+    { label: 'Email',     href: 'mailto:vikyaditama23148@gmail.com',              icon: Mail,      color: '#E11D48' },
   ],
 }
 
 const roles = [
-  { icon: GraduationCap, label: 'Calon Guru Sekolah Dasar', color: '#60A5FA' },
-  { icon: Crown, label: 'Duta Kampus Univ. PGRI Sumenep 2023/2026', color: '#FACC15' },
-  { icon: Sparkles, label: 'Duta Budaya Madura 2024/2025', color: '#E11D48' },
-  { icon: Users, label: 'Ketua Umum KEMUT Group', color: '#34D399' },
+  { icon: GraduationCap, label: 'Calon Guru Sekolah Dasar',                color: '#60A5FA' },
+  { icon: Crown,         label: 'Duta Kampus Univ. PGRI Sumenep 2023/2026', color: '#FACC15' },
+  { icon: Sparkles,      label: 'Duta Budaya Madura 2024/2025',             color: '#E11D48' },
+  { icon: Users,         label: 'Ketua Umum KEMUT Group',                   color: '#34D399' },
 ]
 
 const techStack = [
-  { name: 'Next.js 15', category: 'Frontend', color: '#ffffff', emoji: '▲' },
-  { name: 'TypeScript', category: 'Language', color: '#3B82F6', emoji: '⟨⟩' },
-  { name: 'Tailwind CSS', category: 'Styling', color: '#38BDF8', emoji: '🎨' },
-  { name: 'Framer Motion', category: 'Animation', color: '#A78BFA', emoji: '✦' },
-  { name: 'Supabase', category: 'Backend', color: '#3ECF8E', emoji: '⚡' },
-  { name: 'PostgreSQL', category: 'Database', color: '#60A5FA', emoji: '🗄️' },
-  { name: 'Zustand', category: 'State', color: '#FB923C', emoji: '⚙️' },
-  { name: 'Vercel', category: 'Deploy', color: '#ffffff', emoji: '🚀' },
-  { name: 'PWA', category: 'Mobile', color: '#34D399', emoji: '📱' },
-  { name: 'Git & GitHub', category: 'Version Control', color: '#F97316', emoji: '🔀' },
+  { name: 'Next.js 16',   category: 'Frontend',        color: '#ffffff', emoji: '▲' },
+  { name: 'TypeScript',   category: 'Language',         color: '#3B82F6', emoji: '⟨⟩' },
+  { name: 'Tailwind CSS', category: 'Styling',          color: '#38BDF8', emoji: '🎨' },
+  { name: 'Framer Motion',category: 'Animation',        color: '#A78BFA', emoji: '✦' },
+  { name: 'Supabase',     category: 'Backend',          color: '#3ECF8E', emoji: '⚡' },
+  { name: 'PostgreSQL',   category: 'Database',         color: '#60A5FA', emoji: '🗄️' },
+  { name: 'Zustand',      category: 'State',            color: '#FB923C', emoji: '⚙️' },
+  { name: 'Vercel',       category: 'Deploy',           color: '#ffffff', emoji: '🚀' },
+  { name: 'PWA',          category: 'Mobile',           color: '#34D399', emoji: '📱' },
+  { name: 'Git & GitHub', category: 'Version Control',  color: '#F97316', emoji: '🔀' },
 ]
 
 const features = [
-  { name: 'Landing Page & Branding', status: 'done' },
-  { name: 'Autentikasi (Email & Google)', status: 'done' },
-  { name: 'Auto-create profil saat signup', status: 'done' },
-  { name: 'Dashboard Bento Grid', status: 'done' },
-  { name: 'Jalur Madura (4 Kabupaten)', status: 'done' },
+  // ── SELESAI ──────────────────────────────────────────────────────
+  { name: 'Landing Page & Branding',       status: 'done' },
+  { name: 'Autentikasi (Email & Google)',   status: 'done' },
+  { name: 'Auto-create profil saat signup',status: 'done' },
+  { name: 'Dashboard Bento Grid',          status: 'done' },
+  { name: 'Jalur Madura (4 Kabupaten)',    status: 'done' },
   { name: 'Quiz Engine (Multiple Choice)', status: 'done' },
-  { name: 'Word Sort Quiz', status: 'done' },
-  { name: 'Sistem XP & Level Otomatis', status: 'done' },
-  { name: 'Sistem Hati (Hearts/Lives)', status: 'done' },
-  { name: 'Koin & Reward', status: 'done' },
-  { name: 'Leaderboard Real-time', status: 'done' },
-  { name: 'Pusaka Cards (Collectibles)', status: 'done' },
-  { name: 'PWA (Installable)', status: 'done' },
-  { name: 'Row Level Security (RLS)', status: 'done' },
-  { name: 'Match the Image Quiz', status: 'wip' },
-  { name: 'Web Speech API (Pronunciation)', status: 'wip' },
-  { name: 'Audio Pronunciation (.mp3)', status: 'wip' },
-  { name: 'Daily Streak System', status: 'wip' },
-  { name: 'Notifikasi & Reminder', status: 'planned' },
+  { name: 'Word Sort Quiz',                status: 'done' },
+  { name: 'Sistem XP & Level Otomatis',   status: 'done' },
+  { name: 'Sistem Hati (Hearts/Lives)',    status: 'done' },
+  { name: 'Koin & Reward',                 status: 'done' },
+  { name: 'Leaderboard Real-time',         status: 'done' },
+  { name: 'Pusaka Cards (Collectibles)',   status: 'done' },
+  { name: 'PWA (Installable)',             status: 'done' },
+  { name: 'Row Level Security (RLS)',      status: 'done' },
+  { name: 'MaduWiki (Ensiklopedia)',       status: 'done' },
+  { name: 'Kosakata Madura + KBBI',        status: 'done' },
+  { name: 'Aksara Hanacaraka + Kuis',      status: 'done' },
+  // ── PROSES ───────────────────────────────────────────────────────
+  { name: 'Match the Image Quiz',          status: 'wip' },
+  { name: 'Web Speech API (Pronunciation)',status: 'wip' },
+  { name: 'Audio Pronunciation (.mp3)',    status: 'wip' },
+  { name: 'Daily Streak System',           status: 'wip' },
+  // ── RENCANA ──────────────────────────────────────────────────────
+  { name: 'Notifikasi & Reminder',         status: 'planned' },
   { name: 'Mode Offline (Service Worker)', status: 'planned' },
-  { name: 'Admin Panel Konten', status: 'planned' },
-  { name: 'Animasi Level-Up Cinematic', status: 'planned' },
+  { name: 'Admin Panel Konten',            status: 'planned' },
+  { name: 'Animasi Level-Up Cinematic',    status: 'planned' },
 ]
 
 const statusConfig = {
-  done: { label: 'Selesai', color: 'text-emerald-400', bg: 'bg-emerald-500/10 border-emerald-500/20', icon: CheckCircle2 },
-  wip:  { label: 'Proses',  color: 'text-amber-400',   bg: 'bg-amber-500/10 border-amber-500/20',   icon: Clock },
-  planned: { label: 'Rencana', color: 'text-slate-500', bg: 'bg-white/3 border-white/8', icon: BookMarked },
+  done:    { label: 'Selesai', color: 'text-emerald-400', bg: 'bg-emerald-500/10 border-emerald-500/20', icon: CheckCircle2 },
+  wip:     { label: 'Proses',  color: 'text-amber-400',   bg: 'bg-amber-500/10 border-amber-500/20',     icon: Clock },
+  planned: { label: 'Rencana', color: 'text-slate-500',   bg: 'bg-white/3 border-white/8',               icon: BookMarked },
 }
 
 const doneCount    = features.filter(f => f.status === 'done').length
@@ -100,17 +106,13 @@ function TikTokIcon({ size = 18 }: { size?: number }) {
   )
 }
 
-// ── ANIMATION VARIANT (FIX: gunakan 'easeOut' string, bukan array angka) ──────
+// ── ANIMATION VARIANT ─────────────────────────────────────────────────────────
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 24 },
   show: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: {
-      delay: i * 0.07,
-      duration: 0.5,
-      ease: 'easeOut',   // ← PERBAIKAN: string bukan [0.22, 1, 0.36, 1]
-    },
+    transition: { delay: i * 0.07, duration: 0.5, ease: 'easeOut' },
   }),
 }
 
@@ -132,17 +134,13 @@ export default function DeveloperPage() {
 
       {/* ── HERO PROFILE ── */}
       <motion.section initial="hidden" animate="show" className="mb-10">
-
         <motion.div custom={0} variants={fadeUp} className="flex items-start gap-5 mb-6">
-          {/* Avatar */}
           <div className="relative flex-shrink-0">
             <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#E11D48] to-[#9F1239] flex items-center justify-center text-2xl font-bold shadow-lg rose-glow">
               {developer.avatar}
             </div>
             <span className="absolute -bottom-1 -right-1 w-5 h-5 bg-emerald-500 rounded-full border-2 border-[#0F172A]" />
           </div>
-
-          {/* Name */}
           <div className="flex-1 min-w-0 pt-1">
             <h1 className="text-3xl font-bold leading-tight" style={{ fontFamily: 'Playfair Display, serif' }}>
               {developer.name}
@@ -155,7 +153,6 @@ export default function DeveloperPage() {
           </div>
         </motion.div>
 
-        {/* Bio */}
         <motion.div custom={1} variants={fadeUp}>
           <div className="glass rounded-2xl px-5 py-4 border-l-2 border-[#E11D48]">
             <p className="text-slate-300 text-sm leading-relaxed italic">
@@ -171,7 +168,8 @@ export default function DeveloperPage() {
         <div className="grid grid-cols-1 gap-2">
           {roles.map((r, i) => (
             <motion.div key={r.label} custom={i + 1} variants={fadeUp} className="glass rounded-xl px-4 py-3 flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: r.color + '18', color: r.color }}>
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+                style={{ backgroundColor: r.color + '18', color: r.color }}>
                 <r.icon size={16} />
               </div>
               <span className="text-sm text-slate-300">{r.label}</span>
@@ -271,8 +269,12 @@ export default function DeveloperPage() {
               <p className="font-semibold">{developer.name}</p>
               <p className="text-xs text-slate-500 mt-0.5">Founder · Designer · Developer</p>
               <div className="flex items-center gap-1 mt-2">
-                <span className="text-[10px] bg-[#E11D48]/10 text-[#E11D48] border border-[#E11D48]/20 px-2 py-0.5 rounded-full">Solo Project</span>
-                <span className="text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full">Active</span>
+                <span className="text-[10px] bg-[#E11D48]/10 text-[#E11D48] border border-[#E11D48]/20 px-2 py-0.5 rounded-full">
+                  Solo Project
+                </span>
+                <span className="text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full">
+                  Active
+                </span>
               </div>
             </div>
           </div>
@@ -297,14 +299,9 @@ export default function DeveloperPage() {
               whileTap={{ scale: 0.96 }}
               className="glass rounded-xl px-4 py-3.5 flex items-center gap-3 hover:border-white/20 transition-all group"
             >
-              <div
-                className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
-                style={{ backgroundColor: s.color + '18', color: s.color }}
-              >
-                {s.tiktokSvg
-                  ? <TikTokIcon size={16} />
-                  : s.icon ? <s.icon size={16} /> : null
-                }
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+                style={{ backgroundColor: s.color + '18', color: s.color }}>
+                {s.tiktokSvg ? <TikTokIcon size={16} /> : s.icon ? <s.icon size={16} /> : null}
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium">{s.label}</p>
