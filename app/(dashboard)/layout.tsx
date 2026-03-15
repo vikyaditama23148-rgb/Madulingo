@@ -4,16 +4,16 @@ import { useEffect } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { LayoutDashboard, Map, Trophy, Package, BookOpen } from 'lucide-react'
+import { LayoutDashboard, Map, Trophy, Package, BookOpen, Languages } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { useUserStore } from '@/lib/stores/userStore'
 
 const navItems = [
-  { href: '/dashboard',    icon: LayoutDashboard, label: 'Beranda' },
+  { href: '/dashboard',    icon: LayoutDashboard, label: 'Beranda'  },
   { href: '/learn',        icon: Map,             label: 'Belajar'  },
   { href: '/wiki',         icon: BookOpen,        label: 'Wiki'     },
+  { href: '/kosakata',     icon: Languages,       label: 'Kosakata' },
   { href: '/leaderboard',  icon: Trophy,          label: 'Papan'    },
-  { href: '/collectibles', icon: Package,         label: 'Pusaka'   },
 ]
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
