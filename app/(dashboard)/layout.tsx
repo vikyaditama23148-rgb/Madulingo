@@ -4,16 +4,17 @@ import { useEffect } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { LayoutDashboard, Map, Trophy, Package, BookOpen, Languages } from 'lucide-react'
+import { LayoutDashboard, Map, Trophy, BookOpen, Languages } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { useUserStore } from '@/lib/stores/userStore'
+import HeartTimer from '@/components/HeartTimer'
 
 const navItems = [
-  { href: '/dashboard',    icon: LayoutDashboard, label: 'Beranda'  },
-  { href: '/learn',        icon: Map,             label: 'Belajar'  },
-  { href: '/wiki',         icon: BookOpen,        label: 'Wiki'     },
-  { href: '/kosakata',     icon: Languages,       label: 'Kosakata' },
-  { href: '/leaderboard',  icon: Trophy,          label: 'Papan'    },
+  { href: '/dashboard',   icon: LayoutDashboard, label: 'Beranda'  },
+  { href: '/learn',       icon: Map,             label: 'Belajar'  },
+  { href: '/wiki',        icon: BookOpen,        label: 'Wiki'     },
+  { href: '/kosakata',    icon: Languages,       label: 'Kosakata' },
+  { href: '/leaderboard', icon: Trophy,          label: 'Papan'    },
 ]
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -25,16 +26,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   useEffect(() => {
     const loadUser = async () => {
       const { data: { user } } = await supabase.auth.getUser()
-      if (!user) {
-        router.push('/login')
-        return
-      }
+      if (!user) { router.push('/login'); return }
       const { data: profile } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', user.id)
-        .single()
-
+        .from('profiles').select('*').eq('id', user.id).single()
       if (profile) setProfile(profile)
     }
     loadUser()
@@ -42,6 +36,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   return (
     <div className="min-h-screen bg-[#0F172A] pb-24">
+      {/* Timer regen nyawa — berjalan di background */}
+      <HeartTimer />
+
       {children}
 
       {/* Bottom Navigation */}
@@ -56,9 +53,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 <motion.div
                   whileTap={{ scale: 0.9 }}
                   className={`flex flex-col items-center gap-1 py-2 px-1 rounded-xl transition-all ${
-                    isActive
-                      ? 'bg-[#E11D48] text-white'
-                      : 'text-slate-500 hover:text-slate-300'
+                    isActive ? 'bg-[#E11D48] text-white' : 'text-slate-500 hover:text-slate-300'
                   }`}
                 >
                   <item.icon size={18} />
