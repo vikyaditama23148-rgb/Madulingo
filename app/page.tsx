@@ -148,6 +148,11 @@ export default function HomePage() {
   <Link href="/developer" className="inline-flex items-center gap-1.5 mt-3 text-slate-700 hover:text-slate-400 transition-colors text-xs">
     <span>👨‍💻</span> Tentang Developer
   </Link>
+  <Link href="/tanya-tetua">
+  <button className="flex items-center gap-2 px-6 py-3 rounded-2xl font-semibold border border-amber-800/40 hover:bg-amber-900/20 transition-all text-amber-400">
+    👴 Tanya Tetua
+  </button>
+</Link>
 
 </footer>
     </div>
