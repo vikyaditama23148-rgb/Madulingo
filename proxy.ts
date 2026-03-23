@@ -50,6 +50,9 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|manifest.json|icons).*)',
+    // Jalankan middleware di semua route KECUALI:
+    // - _next/static, _next/image, favicon, manifest, icons
+    // - api/ → API routes tidak butuh auth check middleware
+    '/((?!_next/static|_next/image|favicon.ico|manifest.json|icons|api).*)',
   ],
 }
