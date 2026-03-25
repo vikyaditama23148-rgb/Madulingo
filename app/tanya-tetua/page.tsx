@@ -114,11 +114,24 @@ function MessageBubble({ msg }: { msg: Message }) {
           {msg.text}
         </div>
 
+        {/* Disclaimer untuk jawaban AI (bukan dari cache) */}
+        {!isUser && msg.from_cache === false && (
+          <div
+            className="flex items-start gap-1.5 px-3 py-2 rounded-xl text-[10px] leading-relaxed max-w-[90%]"
+            style={{ backgroundColor: 'rgba(251,191,36,0.08)', border: '1px solid rgba(251,191,36,0.15)' }}
+          >
+            <span className="text-amber-500 flex-shrink-0 mt-0.5">⚠️</span>
+            <span className="text-amber-700">
+              Jawaban ini dihasilkan oleh AI dan mungkin tidak 100% akurat untuk bahasa & tradisi lokal Madura. Mohon verifikasi dengan sumber terpercaya.
+            </span>
+          </div>
+        )}
+
         {/* Meta */}
         <div className="flex items-center gap-2">
           {!isUser && msg.from_cache && (
             <span className="flex items-center gap-1 text-[10px] text-amber-600">
-              <BookOpen size={9} /> Dari pustakawan
+              <BookOpen size={9} /> Dari pustakawan ✓
             </span>
           )}
           <span className="text-[10px] text-slate-700">
