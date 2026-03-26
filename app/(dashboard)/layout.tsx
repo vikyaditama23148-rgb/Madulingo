@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { LayoutDashboard, Map, Trophy, BookOpen, Languages } from 'lucide-react'
+import { LayoutDashboard, Map, Trophy, BookOpen, Languages, Play } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { useUserStore } from '@/lib/stores/userStore'
 import HeartTimer from '@/components/HeartTimer'
@@ -12,9 +12,9 @@ import HeartTimer from '@/components/HeartTimer'
 const navItems = [
   { href: '/dashboard',   icon: LayoutDashboard, label: 'Beranda'  },
   { href: '/learn',       icon: Map,             label: 'Belajar'  },
+  { href: '/video',       icon: Play,            label: 'Video'    },
   { href: '/wiki',        icon: BookOpen,        label: 'Wiki'     },
   { href: '/kosakata',    icon: Languages,       label: 'Kosakata' },
-  { href: '/leaderboard', icon: Trophy,          label: 'Papan'    },
 ]
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -36,9 +36,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   return (
     <div className="min-h-screen bg-[#0F172A] pb-24">
-      {/* Timer regen nyawa — berjalan di background */}
       <HeartTimer />
-
       {children}
 
       {/* Bottom Navigation */}
