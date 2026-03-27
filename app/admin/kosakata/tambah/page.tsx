@@ -8,7 +8,6 @@ import { ArrowLeft, Save } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
 const KATEGORI = ['sapaan', 'angka', 'warna', 'tubuh', 'alam', 'keluarga', 'aktivitas', 'waktu', 'umum']
-const TINGKAT = ['enjak-iya', 'engghi-enten', 'engghi-bhunten']
 
 function InputField({ label, value, onChange, placeholder, required = false, multiline = false }: {
   label: string; value: string; onChange: (v: string) => void
@@ -39,7 +38,9 @@ export default function TambahKosakataPage() {
   const [contohMadura, setContohMadura] = useState('')
   const [contohIndonesia, setContohIndonesia] = useState('')
   const [kategori, setKategori] = useState('umum')
-  const [tingkat, setTingkat] = useState('enjhem')
+  const [enjakIya, setEnjakIya] = useState('')
+  const [engghiEnten, setEngghiEnten] = useState('')
+  const [engghiBhunten, setEngghiBhunten] = useState('')
   const [kbbiUrl, setKbbiUrl] = useState('')
   const [audioUrl, setAudioUrl] = useState('')
 
@@ -50,7 +51,6 @@ export default function TambahKosakataPage() {
     }
     setSaving(true)
 
-    // Auto-generate KBBI URL kalau kosong
     const finalKbbiUrl = kbbiUrl.trim() ||
       (kataIndonesia ? `https://kbbi.kemdikbud.go.id/entri/${kataIndonesia.toLowerCase().trim()}` : '')
 
@@ -61,7 +61,9 @@ export default function TambahKosakataPage() {
       contoh_madura: contohMadura.trim() || null,
       contoh_indonesia: contohIndonesia.trim() || null,
       kategori,
-      tingkat_bahasa: tingkat,
+      enjak_iya: enjakIya.trim() || null,
+      engghi_enten: engghiEnten.trim() || null,
+      engghi_bhunten: engghiBhunten.trim() || null,
       kbbi_url: finalKbbiUrl || null,
       audio_url: audioUrl.trim() || null,
     })
@@ -131,24 +133,57 @@ export default function TambahKosakataPage() {
         </div>
 
         {/* Tingkat bahasa */}
-        <div className="glass rounded-2xl p-5">
-          <p className="text-xs text-[#E11D48] font-semibold uppercase tracking-wider mb-3">📊 Tingkat Bahasa</p>
-          <div className="grid grid-cols-3 gap-2">
-            {TINGKAT.map(t => (
-              <button
-                key={t}
-                onClick={() => setTingkat(t)}
-                className={`py-2 rounded-xl text-xs font-medium transition-all border ${
-                  tingkat === t
-                    ? 'border-[#E11D48] bg-[#E11D48]/10 text-[#E11D48]'
-                    : 'border-white/10 bg-white/3 text-slate-500 hover:text-slate-300'
-                }`}
-              >
-                {t}
-              </button>
-            ))}
+        <div className="glass rounded-2xl p-5 space-y-3">
+          <p className="text-xs text-[#E11D48] font-semibold uppercase tracking-wider">📊 Tingkat Bahasa (opsional)</p>
+          <p className="text-[10px] text-slate-500 -mt-1">Isi padanan kata untuk setiap tingkat tutur bahasa Madura</p>
+
+          {/* Enjak-Iya */}
+          <div>
+            <label className="text-xs mb-1.5 flex items-center gap-2 block">
+              <span className="inline-block w-2 h-2 rounded-full bg-[#34D399]" />
+              <span className="text-[#34D399] font-bold">Enjak-Iya</span>
+              <span className="text-slate-600">(Bahasa kasar / ngoko)</span>
+            </label>
+            <input
+              type="text"
+              value={enjakIya}
+              onChange={e => setEnjakIya(e.target.value)}
+              placeholder="contoh: Abhakalan"
+              className="w-full bg-white/5 border border-[#34D399]/20 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-[#34D399] transition-colors"
+            />
           </div>
-          <p className="text-[10px] text-slate-600 mt-2">Enjhem = kasar · Enggi-Enten = menengah · Bhumajhân = halus</p>
+
+          {/* Engghi-Enten */}
+          <div>
+            <label className="text-xs mb-1.5 flex items-center gap-2 block">
+              <span className="inline-block w-2 h-2 rounded-full bg-[#FACC15]" />
+              <span className="text-[#FACC15] font-bold">Engghi-Enten</span>
+              <span className="text-slate-600">(Bahasa menengah / madya)</span>
+            </label>
+            <input
+              type="text"
+              value={engghiEnten}
+              onChange={e => setEngghiEnten(e.target.value)}
+              placeholder="contoh: Abhakalan"
+              className="w-full bg-white/5 border border-[#FACC15]/20 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-[#FACC15] transition-colors"
+            />
+          </div>
+
+          {/* Engghi-Bhunten */}
+          <div>
+            <label className="text-xs mb-1.5 flex items-center gap-2 block">
+              <span className="inline-block w-2 h-2 rounded-full bg-[#E11D48]" />
+              <span className="text-[#E11D48] font-bold">Engghi-Bhunten</span>
+              <span className="text-slate-600">(Bahasa halus / krama)</span>
+            </label>
+            <input
+              type="text"
+              value={engghiBhunten}
+              onChange={e => setEngghiBhunten(e.target.value)}
+              placeholder="contoh: Apacangan"
+              className="w-full bg-white/5 border border-[#E11D48]/20 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-[#E11D48] transition-colors"
+            />
+          </div>
         </div>
 
         {/* Link & Audio */}

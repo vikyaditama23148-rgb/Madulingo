@@ -15,7 +15,9 @@ interface VocabWord {
   contoh_madura: string | null
   contoh_indonesia: string | null
   kategori: string
-  tingkat_bahasa: string
+  enjak_iya: string | null
+  engghi_enten: string | null
+  engghi_bhunten: string | null
   kbbi_url: string | null
   audio_url: string | null
 }
@@ -195,7 +197,6 @@ function WordCard({ word, onSelect }: { word: VocabWord; onSelect: (w: VocabWord
 // ── WORD MODAL ────────────────────────────────────────────────────────────────
 function WordModal({ word, onClose }: { word: VocabWord; onClose: () => void }) {
   const kat = kategoriConfig[word.kategori] || kategoriConfig.umum
-  const tingkat = tingkatConfig[word.tingkat_bahasa]
 
   return (
     <motion.div
@@ -210,26 +211,26 @@ function WordModal({ word, onClose }: { word: VocabWord; onClose: () => void }) 
         className="relative z-10 w-full max-w-lg glass-dark rounded-3xl overflow-hidden"
         onClick={e => e.stopPropagation()}
       >
-        <div className="px-6 pt-6 pb-4" style={{ background: `linear-gradient(to bottom, ${kat.color}15, transparent)` }}>
-          <div className="flex items-start justify-between mb-3">
-            <span className="text-4xl">{kat.emoji}</span>
-            <button onClick={onClose} className="p-1.5 rounded-lg text-slate-500 hover:text-white hover:bg-white/10 transition-all">
-              <X size={18} />
-            </button>
-          </div>
-          <h2 className="text-3xl font-bold mb-1" style={{ fontFamily: 'Playfair Display, serif' }}>
-            {word.kata_madura}
-          </h2>
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-xl font-semibold" style={{ color: kat.color }}>{word.kata_indonesia}</span>
-            {tingkat && (
-              <span className="text-[10px] px-2 py-0.5 rounded-full border font-medium"
-                style={{ borderColor: tingkat.color + '40', color: tingkat.color, backgroundColor: tingkat.color + '10' }}>
-                {tingkat.label}
-              </span>
-            )}
-          </div>
-        </div>
+        <div className="glass rounded-xl p-4">
+  <p className="text-xs text-slate-500 mb-3">Tingkat Bahasa</p>
+  <div className="space-y-2">
+    {[
+      { label: 'Enjak-Iya',       color: '#34D399', value: word.enjak_iya },
+      { label: 'Engghi-Enten',    color: '#FACC15', value: word.engghi_enten },
+      { label: 'Engghi-Bhunten',  color: '#E11D48', value: word.engghi_bhunten },
+    ].map(t => (
+      <div key={t.label} className="flex items-center gap-3">
+        <span className="text-xs font-bold w-32 flex-shrink-0"
+          style={{ color: t.color }}>
+          {t.label}
+        </span>
+        <span className="text-sm text-white font-semibold">
+          {t.value || <span className="text-slate-600 font-normal italic">—</span>}
+        </span>
+      </div>
+    ))}
+  </div>
+</div>
 
         <div className="px-6 pb-6 space-y-4 max-h-[60vh] overflow-y-auto">
           <div className="glass rounded-xl p-4">
