@@ -182,7 +182,7 @@ export default function VideoDetailPage() {
   useEffect(() => {
     const init = async () => {
       const { data: { user } } = await supabase.auth.getUser()
-      if (!user) { router.push('/login'); return }
+      if (!user) { router.replace('/login'); return }
       await Promise.all([fetchVideo(), fetchComments(), fetchInteractions()])
       // Catat ke history & tambah view
       await recordView(user.id)

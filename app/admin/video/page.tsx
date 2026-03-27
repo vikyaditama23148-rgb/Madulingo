@@ -158,6 +158,12 @@ export default function AdminVideoPage() {
     await supabase.from('videos').update({ is_featured: !current }).eq('id', id)
     await fetchVideos()
   }
+  const checkAuth = async () => {
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) { router.replace('/login'); return }
+}
+checkAuth()
+fetchVideos()
 
   return (
     <div className="px-4 py-6 max-w-2xl mx-auto">
