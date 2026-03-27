@@ -154,9 +154,9 @@ const kategoriConfig: Record<string, { emoji: string; color: string }> = {
 }
 
 const tingkatConfig: Record<string, { label: string; color: string }> = {
-  'enjhem':      { label: 'Enjhem',      color: '#34D399' },
-  'enggi-enten': { label: 'Enggi-Enten', color: '#FACC15' },
-  'bhumajhân':   { label: 'Bhumajhân',   color: '#E11D48' },
+  'enjak-iya':      { label: 'Enjak-Iya',      color: '#34D399' },
+  'engghi-enten': { label: 'Engghi-Enten', color: '#FACC15' },
+  'engghi-bhunten':   { label: 'Engghi-Bhunten',   color: '#E11D48' },
 }
 
 // ── WORD CARD ─────────────────────────────────────────────────────────────────

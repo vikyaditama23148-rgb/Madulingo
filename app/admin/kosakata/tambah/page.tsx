@@ -8,7 +8,7 @@ import { ArrowLeft, Save } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
 const KATEGORI = ['sapaan', 'angka', 'warna', 'tubuh', 'alam', 'keluarga', 'aktivitas', 'waktu', 'umum']
-const TINGKAT = ['enjhem', 'enggi-enten', 'bhumajhân']
+const TINGKAT = ['enjak-iya', 'engghi-enten', 'engghi-bhunten']
 
 function InputField({ label, value, onChange, placeholder, required = false, multiline = false }: {
   label: string; value: string; onChange: (v: string) => void
