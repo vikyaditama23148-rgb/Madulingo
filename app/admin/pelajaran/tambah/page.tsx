@@ -16,11 +16,13 @@ const districtColor: Record<string, string> = {
 }
 
 interface QuizItem {
-  type: 'multiple_choice' | 'word_sort'
+  type: 'multiple_choice' | 'word_sort' | 'fill_blank' | 'true_false'
   question: string
   options: string[]
   words: string[]
-  answer: string | string[]
+  answer: string | string[] | boolean
+  hint: string
+  timer: number
   audio: string | null
 }
 
@@ -52,8 +54,17 @@ const defaultQuiz = (): QuizItem => ({
   options: ['', '', '', ''],
   words: [],
   answer: '',
+  hint: '',
+  timer: 5,
   audio: null,
 })
+
+const typeConfig = {
+  multiple_choice: { label: '🔘 Pilihan Ganda', color: '#E11D48' },
+  word_sort:       { label: '🔤 Susun Kata',    color: '#7C3AED' },
+  fill_blank:      { label: '✍️ Isi Kalimat',   color: '#0EA5E9' },
+  true_false:      { label: '⚡ Kilat Benar/Salah', color: '#FACC15' },
+}
 
 export default function TambahPelajaranPage() {
   const router = useRouter()
@@ -61,7 +72,6 @@ export default function TambahPelajaranPage() {
   const [saving, setSaving] = useState(false)
   const [expandedQuiz, setExpandedQuiz] = useState<number | null>(0)
 
-  // Lesson fields
   const [title, setTitle] = useState('')
   const [district, setDistrict] = useState('Bangkalan')
   const [difficulty, setDifficulty] = useState('1')
@@ -102,26 +112,44 @@ export default function TambahPelajaranPage() {
     if (!title.trim()) { alert('Judul pelajaran wajib diisi!'); return }
     if (quizzes.some(q => !q.question.trim())) { alert('Semua quiz harus ada pertanyaannya!'); return }
     if (quizzes.some(q => q.type === 'multiple_choice' && !q.answer)) {
-      alert('Semua quiz pilihan ganda harus ada jawaban benarnya!')
-      return
+      alert('Semua quiz pilihan ganda harus ada jawaban benarnya!'); return
+    }
+    if (quizzes.some(q => q.type === 'fill_blank' && !q.answer)) {
+      alert('Semua quiz isi kalimat harus ada jawaban benarnya!'); return
     }
 
     setSaving(true)
 
     const contentJson = {
       description: description.trim(),
-      quizzes: quizzes.map(q => ({
-        type: q.type,
-        question: q.question.trim(),
-        ...(q.type === 'multiple_choice' ? {
+      quizzes: quizzes.map(q => {
+        const base = {
+          type: q.type,
+          question: q.question.trim(),
+          audio: q.audio || null,
+        }
+        if (q.type === 'multiple_choice') return {
+          ...base,
           options: q.options.filter(o => o.trim()),
           answer: q.answer,
-        } : {
+        }
+        if (q.type === 'word_sort') return {
+          ...base,
           words: q.words,
           answer: q.answer,
-        }),
-        audio: q.audio || null,
-      }))
+        }
+        if (q.type === 'fill_blank') return {
+          ...base,
+          answer: (q.answer as string).trim(),
+          hint: q.hint.trim() || null,
+        }
+        if (q.type === 'true_false') return {
+          ...base,
+          answer: q.answer as boolean,
+          timer: q.timer || 5,
+        }
+        return base
+      })
     }
 
     const { error } = await supabase.from('lessons').insert({
@@ -167,37 +195,20 @@ export default function TambahPelajaranPage() {
           <p className="text-xs font-semibold uppercase tracking-wider" style={{ color }}>
             📚 Informasi Pelajaran
           </p>
-          <InputField
-            label="Judul Pelajaran"
-            value={title}
-            onChange={setTitle}
-            placeholder="contoh: Salam & Sapaan"
-            required
-          />
-          <InputField
-            label="Deskripsi Singkat"
-            value={description}
-            onChange={setDescription}
-            placeholder="contoh: Belajar cara menyapa dalam bahasa Madura"
-            multiline
-          />
+          <InputField label="Judul Pelajaran" value={title} onChange={setTitle} placeholder="contoh: Salam & Sapaan" required />
+          <InputField label="Deskripsi Singkat" value={description} onChange={setDescription} placeholder="contoh: Belajar cara menyapa dalam bahasa Madura" multiline />
         </div>
 
         {/* Kabupaten */}
         <div className="glass rounded-2xl p-5">
-          <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color }}>
-            🏙️ Kabupaten
-          </p>
+          <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color }}>🏙️ Kabupaten</p>
           <div className="grid grid-cols-2 gap-2">
             {DISTRICTS.map(d => (
-              <button
-                key={d}
-                onClick={() => setDistrict(d)}
+              <button key={d} onClick={() => setDistrict(d)}
                 className="py-2.5 rounded-xl text-sm font-medium transition-all border"
-                style={
-                  district === d
-                    ? { borderColor: districtColor[d], backgroundColor: districtColor[d] + '20', color: districtColor[d] }
-                    : { borderColor: 'rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.03)', color: '#64748b' }
+                style={district === d
+                  ? { borderColor: districtColor[d], backgroundColor: districtColor[d] + '20', color: districtColor[d] }
+                  : { borderColor: 'rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.03)', color: '#64748b' }
                 }
               >
                 {d}
@@ -208,9 +219,7 @@ export default function TambahPelajaranPage() {
 
         {/* Pengaturan */}
         <div className="glass rounded-2xl p-5">
-          <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color }}>
-            ⚙️ Pengaturan
-          </p>
+          <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color }}>⚙️ Pengaturan</p>
           <div className="grid grid-cols-3 gap-3 mb-3">
             <InputField label="XP Reward" value={xpReward} onChange={setXpReward} placeholder="20" />
             <InputField label="Koin Reward" value={coinReward} onChange={setCoinReward} placeholder="10" />
@@ -220,15 +229,12 @@ export default function TambahPelajaranPage() {
             <label className="text-xs text-slate-400 mb-1.5 block">Tingkat Kesulitan</label>
             <div className="flex gap-2">
               {[1, 2, 3, 4, 5].map(n => (
-                <button
-                  key={n}
-                  onClick={() => setDifficulty(String(n))}
+                <button key={n} onClick={() => setDifficulty(String(n))}
                   className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all border ${
                     difficulty === String(n)
                       ? 'border-[#FACC15] bg-[#FACC15]/10 text-[#FACC15]'
                       : 'border-white/10 bg-white/3 text-slate-500'
-                  }`}
-                >
+                  }`}>
                   {n}⭐
                 </button>
               ))}
@@ -242,10 +248,8 @@ export default function TambahPelajaranPage() {
             <p className="text-sm font-semibold">
               🎯 Quiz <span className="text-slate-500 font-normal">({quizzes.length} soal)</span>
             </p>
-            <button
-              onClick={addQuiz}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#E11D48]/10 text-[#E11D48] border border-[#E11D48]/20 rounded-xl text-xs font-semibold hover:bg-[#E11D48]/20 transition-all"
-            >
+            <button onClick={addQuiz}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#E11D48]/10 text-[#E11D48] border border-[#E11D48]/20 rounded-xl text-xs font-semibold hover:bg-[#E11D48]/20 transition-all">
               <Plus size={13} /> Tambah Soal
             </button>
           </div>
@@ -265,14 +269,13 @@ export default function TambahPelajaranPage() {
                   <span className="text-sm text-slate-400 flex-1 text-left line-clamp-1">
                     {quiz.question || 'Soal belum diisi...'}
                   </span>
-                  <span className="text-[10px] text-slate-600 flex-shrink-0 hidden sm:block">
-                    {quiz.type === 'multiple_choice' ? '🔘 Pilihan Ganda' : '🔤 Susun Kata'}
+                  <span className="text-[10px] flex-shrink-0 hidden sm:block font-medium"
+                    style={{ color: typeConfig[quiz.type].color }}>
+                    {typeConfig[quiz.type].label}
                   </span>
                   {quizzes.length > 1 && (
-                    <button
-                      onClick={e => { e.stopPropagation(); removeQuiz(i) }}
-                      className="p-1 rounded-lg text-red-400 hover:bg-red-500/10 flex-shrink-0 transition-all"
-                    >
+                    <button onClick={e => { e.stopPropagation(); removeQuiz(i) }}
+                      className="p-1 rounded-lg text-red-400 hover:bg-red-500/10 flex-shrink-0 transition-all">
                       <Trash2 size={12} />
                     </button>
                   )}
@@ -293,19 +296,16 @@ export default function TambahPelajaranPage() {
                     >
                       <div className="px-4 pb-4 pt-3 space-y-3">
 
-                        {/* Type toggle */}
-                        <div className="flex gap-2">
-                          {(['multiple_choice', 'word_sort'] as const).map(t => (
-                            <button
-                              key={t}
-                              onClick={() => updateQuiz(i, 'type', t)}
-                              className={`flex-1 py-2 rounded-xl text-xs font-medium border transition-all ${
-                                quiz.type === t
-                                  ? 'border-[#E11D48] bg-[#E11D48]/10 text-[#E11D48]'
-                                  : 'border-white/10 bg-white/3 text-slate-500'
-                              }`}
-                            >
-                              {t === 'multiple_choice' ? '🔘 Pilihan Ganda' : '🔤 Susun Kata'}
+                        {/* Type toggle — 4 tipe */}
+                        <div className="grid grid-cols-2 gap-2">
+                          {(Object.keys(typeConfig) as Array<keyof typeof typeConfig>).map(t => (
+                            <button key={t} onClick={() => updateQuiz(i, 'type', t)}
+                              className="py-2 rounded-xl text-xs font-medium border transition-all"
+                              style={quiz.type === t
+                                ? { borderColor: typeConfig[t].color, backgroundColor: typeConfig[t].color + '15', color: typeConfig[t].color }
+                                : { borderColor: 'rgba(255,255,255,0.08)', backgroundColor: 'rgba(255,255,255,0.02)', color: '#64748b' }
+                              }>
+                              {typeConfig[t].label}
                             </button>
                           ))}
                         </div>
@@ -315,11 +315,17 @@ export default function TambahPelajaranPage() {
                           label="Pertanyaan"
                           value={quiz.question}
                           onChange={v => updateQuiz(i, 'question', v)}
-                          placeholder="contoh: Apa arti kata 'mera' dalam bahasa Indonesia?"
+                          placeholder={
+                            quiz.type === 'fill_blank'
+                              ? "contoh: _____ artina 'merah' dhalem basa Madura"
+                              : quiz.type === 'true_false'
+                              ? "contoh: 'Bhiru' artina biru dalam bahasa Indonesia"
+                              : "contoh: Apa arti kata 'mera' dalam bahasa Indonesia?"
+                          }
                           required
                         />
 
-                        {/* Multiple choice */}
+                        {/* ── MULTIPLE CHOICE ── */}
                         {quiz.type === 'multiple_choice' && (
                           <>
                             <div>
@@ -355,7 +361,7 @@ export default function TambahPelajaranPage() {
                           </>
                         )}
 
-                        {/* Word sort */}
+                        {/* ── WORD SORT ── */}
                         {quiz.type === 'word_sort' && (
                           <>
                             <div>
@@ -366,21 +372,102 @@ export default function TambahPelajaranPage() {
                               <input
                                 value={Array.isArray(quiz.words) ? quiz.words.join(', ') : ''}
                                 onChange={e => updateQuiz(i, 'words', e.target.value.split(',').map(w => w.trim()).filter(Boolean))}
-                                placeholder="contoh: Sengko'', bade, dhateng, saniki, muleh"
+                                placeholder="contoh: Sengko', bade, dhateng, saniki"
                                 className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-700 focus:outline-none focus:border-[#E11D48] transition-colors"
                               />
                             </div>
                             <div>
                               <label className="text-xs text-slate-400 mb-1.5 block">
                                 Urutan Jawaban Benar <span className="text-[#E11D48]">*</span>
-                                <span className="text-slate-600 ml-1">(pisah dengan koma, urutan yang benar)</span>
+                                <span className="text-slate-600 ml-1">(pisah dengan koma)</span>
                               </label>
                               <input
-                                value={Array.isArray(quiz.answer) ? quiz.answer.join(', ') : ''}
+                                value={Array.isArray(quiz.answer) ? (quiz.answer as string[]).join(', ') : ''}
                                 onChange={e => updateQuiz(i, 'answer', e.target.value.split(',').map(w => w.trim()).filter(Boolean))}
-                                placeholder="contoh: Sengko'', bade, dhateng"
+                                placeholder="contoh: Sengko', bade, dhateng"
                                 className="w-full bg-emerald-500/5 border border-emerald-500/20 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-700 focus:outline-none focus:border-emerald-500 transition-colors"
                               />
+                            </div>
+                          </>
+                        )}
+
+                        {/* ── FILL BLANK ── */}
+                        {quiz.type === 'fill_blank' && (
+                          <>
+                            <div>
+                              <label className="text-xs text-slate-400 mb-1.5 block">
+                                Jawaban Benar <span className="text-[#E11D48]">*</span>
+                                <span className="text-slate-600 ml-1">(tidak case-sensitive)</span>
+                              </label>
+                              <input
+                                value={quiz.answer as string}
+                                onChange={e => updateQuiz(i, 'answer', e.target.value)}
+                                placeholder="contoh: Mera"
+                                className="w-full bg-emerald-500/5 border border-emerald-500/20 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-700 focus:outline-none focus:border-emerald-500 transition-colors"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-xs text-slate-400 mb-1.5 block">
+                                Petunjuk / Hint
+                                <span className="text-slate-600 ml-1">(opsional)</span>
+                              </label>
+                              <input
+                                value={quiz.hint}
+                                onChange={e => updateQuiz(i, 'hint', e.target.value)}
+                                placeholder="contoh: Warna seperti darah"
+                                className="w-full bg-[#FACC15]/5 border border-[#FACC15]/15 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-700 focus:outline-none focus:border-[#FACC15] transition-colors"
+                              />
+                            </div>
+                          </>
+                        )}
+
+                        {/* ── TRUE FALSE ── */}
+                        {quiz.type === 'true_false' && (
+                          <>
+                            <div>
+                              <label className="text-xs text-slate-400 mb-1.5 block">
+                                Jawaban Benar <span className="text-[#E11D48]">*</span>
+                              </label>
+                              <div className="grid grid-cols-2 gap-2">
+                                <button
+                                  onClick={() => updateQuiz(i, 'answer', true)}
+                                  className={`py-3 rounded-xl text-sm font-bold border-2 transition-all ${
+                                    quiz.answer === true
+                                      ? 'border-emerald-500 bg-emerald-500/15 text-emerald-400'
+                                      : 'border-white/10 bg-white/3 text-slate-500'
+                                  }`}
+                                >
+                                  ✅ BENAR
+                                </button>
+                                <button
+                                  onClick={() => updateQuiz(i, 'answer', false)}
+                                  className={`py-3 rounded-xl text-sm font-bold border-2 transition-all ${
+                                    quiz.answer === false
+                                      ? 'border-red-500 bg-red-500/15 text-red-400'
+                                      : 'border-white/10 bg-white/3 text-slate-500'
+                                  }`}
+                                >
+                                  ❌ SALAH
+                                </button>
+                              </div>
+                            </div>
+                            <div>
+                              <label className="text-xs text-slate-400 mb-1.5 block">
+                                Durasi Timer
+                                <span className="text-slate-600 ml-1">(detik)</span>
+                              </label>
+                              <div className="flex gap-2">
+                                {[3, 5, 7, 10].map(t => (
+                                  <button key={t} onClick={() => updateQuiz(i, 'timer', t)}
+                                    className={`flex-1 py-2 rounded-xl text-xs font-bold border transition-all ${
+                                      quiz.timer === t
+                                        ? 'border-[#FACC15] bg-[#FACC15]/10 text-[#FACC15]'
+                                        : 'border-white/10 bg-white/3 text-slate-500'
+                                    }`}>
+                                    {t}s
+                                  </button>
+                                ))}
+                              </div>
                             </div>
                           </>
                         )}
@@ -388,7 +475,7 @@ export default function TambahPelajaranPage() {
                         {/* Audio */}
                         <div>
                           <label className="text-xs text-slate-400 mb-1.5 block">
-                            URL Audio Pronunciaton <span className="text-slate-600">(opsional)</span>
+                            URL Audio <span className="text-slate-600">(opsional)</span>
                           </label>
                           <input
                             value={quiz.audio || ''}
@@ -408,11 +495,12 @@ export default function TambahPelajaranPage() {
 
         {/* Tips */}
         <div className="glass rounded-xl p-4 border-l-2 border-[#FACC15]">
-          <p className="text-xs text-[#FACC15] font-semibold mb-1">💡 Tips Membuat Quiz</p>
-          <ul className="text-xs text-slate-500 space-y-1 leading-relaxed">
-            <li>• Jawaban benar harus sama persis dengan salah satu pilihan (termasuk huruf besar/kecil)</li>
-            <li>• Minimal 2 pilihan, disarankan 4 pilihan untuk pilihan ganda</li>
-            <li>• Untuk susun kata, pastikan semua kata jawaban ada di daftar kata yang tersedia</li>
+          <p className="text-xs text-[#FACC15] font-semibold mb-2">💡 Panduan Tipe Quiz</p>
+          <ul className="text-xs text-slate-500 space-y-1.5 leading-relaxed">
+            <li>🔘 <strong className="text-slate-400">Pilihan Ganda</strong> — Jawaban harus sama persis dengan salah satu pilihan</li>
+            <li>🔤 <strong className="text-slate-400">Susun Kata</strong> — Pastikan kata jawaban ada di daftar kata yang tersedia</li>
+            <li>✍️ <strong className="text-slate-400">Isi Kalimat</strong> — Gunakan _____ untuk menandai bagian yang dikosongkan, tidak case-sensitive</li>
+            <li>⚡ <strong className="text-slate-400">Kilat Benar/Salah</strong> — User harus menjawab sebelum timer habis</li>
           </ul>
         </div>
       </div>
