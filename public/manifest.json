@@ -7,6 +7,30 @@
   "background_color": "#0F172A",
   "theme_color": "#E11D48",
   "orientation": "portrait",
+  "lang": "id",
+  "dir": "ltr",
+  "scope": "/",
+  "categories": ["education", "games"],
+  "screenshots": [
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Mulai Belajar",
+      "url": "/learn",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Kosakata",
+      "url": "/kosakata",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ],
   "icons": [
     {
       "src": "/icons/icon-192.png",
@@ -20,8 +44,5 @@
       "type": "image/png",
       "purpose": "any maskable"
     }
-  ],
-  "categories": ["education", "games"],
-  "lang": "id",
-  "dir": "ltr"
+  ]
 }
