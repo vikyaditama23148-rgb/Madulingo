@@ -37,7 +37,10 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap"
           rel="stylesheet"
         />
-      </head>
+      
+      <link rel="icon" href="/icons/icon-192.png" />
+      <link rel="apple-touch-icon" href="/icons/icon-512.png" />
+    </head>
       <body>
         <div className="batik-overlay" aria-hidden="true" />
         {children}
