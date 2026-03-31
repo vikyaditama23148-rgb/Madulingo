@@ -150,7 +150,7 @@ export default function FeedbackButton() {
                 </button>
               </div>
 
-              <div className="px-5 pb-6 space-y-4 max-h-[75vh] overflow-y-auto">
+              <div className="px-5 pb-28 space-y-4 max-h-[75vh] overflow-y-auto">
 
                 {/* SUCCESS STATE */}
                 <AnimatePresence>
