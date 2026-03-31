@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { Flame, Heart, Coins, Trophy, Star, ArrowRight, LogOut, Zap } from 'lucide-react'
+import { Flame, Heart, Star, ArrowRight, LogOut, Zap } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { useUserStore } from '@/lib/stores/userStore'
 import { xpProgress, xpToNextLevel, getLevelTitle, DISTRICTS } from '@/lib/utils/xp'
@@ -18,10 +18,33 @@ export default function DashboardPage() {
   const router = useRouter()
   const supabase = createClient()
 
+  // ── CEK STATUS ONBOARDING DARI SUPABASE ──
   useEffect(() => {
-    const sudahOnboard = localStorage.getItem('madulingo_onboarded')
-    if (!sudahOnboard) setShowOnboarding(true)
-  }, [])
+    if (!profile) return
+    const checkOnboarding = async () => {
+      const { data } = await supabase
+        .from('profiles')
+        .select('has_onboarded')
+        .eq('id', profile.id)
+        .single()
+
+      // Tampilkan onboarding hanya jika has_onboarded = false atau null
+      if (data && !data.has_onboarded) {
+        setShowOnboarding(true)
+      }
+    }
+    checkOnboarding()
+  }, [profile])
+
+  // ── SELESAI ONBOARDING → SIMPAN KE SUPABASE ──
+  const handleOnboardingComplete = async () => {
+    setShowOnboarding(false)
+    if (!profile) return
+    await supabase
+      .from('profiles')
+      .update({ has_onboarded: true })
+      .eq('id', profile.id)
+  }
 
   useEffect(() => {
     if (!profile) return
@@ -45,9 +68,9 @@ export default function DashboardPage() {
 
   return (
     <>
-      {/* Onboarding Cinematic — hanya tampil sekali setelah login */}
+      {/* Onboarding Cinematic — tampil sekali, disimpan di Supabase */}
       {showOnboarding && (
-        <OnboardingCinematic onComplete={() => setShowOnboarding(false)} />
+        <OnboardingCinematic onComplete={handleOnboardingComplete} />
       )}
 
       <div className="px-4 pt-6 max-w-lg mx-auto">
