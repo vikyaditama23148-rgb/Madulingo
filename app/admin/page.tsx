@@ -7,7 +7,7 @@ import { motion } from 'framer-motion'
 import {
   BookOpen, ScrollText, GraduationCap, Users,
   MessageSquare, LogOut, Shield, ChevronRight,
-  TrendingUp, BookMarked
+  TrendingUp, BookMarked, MessageSquarePlus
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { useUserStore } from '@/lib/stores/userStore'
@@ -19,6 +19,7 @@ interface Stats {
   stories: number
   users: number
   kb: number
+  feedback: number
 }
 
 const adminMenus = [
@@ -70,32 +71,45 @@ const adminMenus = [
     color: '#FACC15',
     statKey: 'kb' as keyof Stats,
   },
+  {
+    href: '/admin/feedback',
+    icon: MessageSquarePlus,
+    label: 'Feedback',
+    desc: 'Kelola feedback dari pengguna',
+    color: '#E11D48',
+    statKey: 'feedback' as keyof Stats,
+  },
 ]
 
 export default function AdminDashboardPage() {
   const router = useRouter()
   const { profile } = useUserStore()
   const supabase = createClient()
-  const [stats, setStats] = useState<Stats>({ lessons: 0, vocabulary: 0, wiki: 0, stories: 0, users: 0, kb: 0 })
+  const [stats, setStats] = useState<Stats>({
+    lessons: 0, vocabulary: 0, wiki: 0,
+    stories: 0, users: 0, kb: 0, feedback: 0,
+  })
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchStats = async () => {
-      const [lessons, vocab, wiki, stories, users, kb] = await Promise.all([
+      const [lessons, vocab, wiki, stories, users, kb, feedback] = await Promise.all([
         supabase.from('lessons').select('id', { count: 'exact', head: true }),
         supabase.from('vocabulary').select('id', { count: 'exact', head: true }),
         supabase.from('wiki_articles').select('id', { count: 'exact', head: true }),
         supabase.from('stories').select('id', { count: 'exact', head: true }),
         supabase.from('profiles').select('id', { count: 'exact', head: true }),
         supabase.from('ai_knowledge_base').select('id', { count: 'exact', head: true }),
+        supabase.from('feedback').select('id', { count: 'exact', head: true }),
       ])
       setStats({
-        lessons: lessons.count || 0,
-        vocabulary: vocab.count || 0,
-        wiki: wiki.count || 0,
-        stories: stories.count || 0,
-        users: users.count || 0,
-        kb: kb.count || 0,
+        lessons:    lessons.count    || 0,
+        vocabulary: vocab.count      || 0,
+        wiki:       wiki.count       || 0,
+        stories:    stories.count    || 0,
+        users:      users.count      || 0,
+        kb:         kb.count         || 0,
+        feedback:   feedback.count   || 0,
       })
       setLoading(false)
     }
@@ -141,17 +155,20 @@ export default function AdminDashboardPage() {
         </div>
         {loading ? (
           <div className="grid grid-cols-3 gap-3">
-            {[1,2,3,4,5,6].map(i => <div key={i} className="bg-white/5 rounded-xl h-14 animate-pulse" />)}
+            {[1,2,3,4,5,6,7].map(i => (
+              <div key={i} className="bg-white/5 rounded-xl h-14 animate-pulse" />
+            ))}
           </div>
         ) : (
           <div className="grid grid-cols-3 gap-3">
             {[
-              { label: 'Pengguna', value: stats.users, color: '#34D399' },
-              { label: 'Pelajaran', value: stats.lessons, color: '#E11D48' },
-              { label: 'Kosakata', value: stats.vocabulary, color: '#7C3AED' },
-              { label: 'Artikel Wiki', value: stats.wiki, color: '#0EA5E9' },
-              { label: 'Cerita', value: stats.stories, color: '#F97316' },
-              { label: 'Knowledge Base', value: stats.kb, color: '#FACC15' },
+              { label: 'Pengguna',      value: stats.users,      color: '#34D399' },
+              { label: 'Pelajaran',     value: stats.lessons,    color: '#E11D48' },
+              { label: 'Kosakata',      value: stats.vocabulary, color: '#7C3AED' },
+              { label: 'Artikel Wiki',  value: stats.wiki,       color: '#0EA5E9' },
+              { label: 'Cerita',        value: stats.stories,    color: '#F97316' },
+              { label: 'Knowledge Base',value: stats.kb,         color: '#FACC15' },
+              { label: 'Feedback',      value: stats.feedback,   color: '#E11D48' },
             ].map(s => (
               <div key={s.label} className="bg-white/3 rounded-xl p-3 text-center">
                 <p className="text-xl font-bold" style={{ color: s.color }}>{s.value}</p>

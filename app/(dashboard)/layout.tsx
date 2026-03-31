@@ -8,6 +8,7 @@ import { LayoutDashboard, BookOpen, Languages, Play, MessageCircle } from 'lucid
 import { createClient } from '@/lib/supabase/client'
 import { useUserStore } from '@/lib/stores/userStore'
 import HeartTimer from '@/components/HeartTimer'
+import FeedbackButton from '@/components/FeedbackButton'
 
 const navItems = [
   { href: '/dashboard',   icon: LayoutDashboard, label: 'Beranda'  },
@@ -37,6 +38,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <div className="min-h-screen bg-[#0F172A] pb-24">
       <HeartTimer />
+      <FeedbackButton />
       {children}
 
       {/* Bottom Navigation */}
